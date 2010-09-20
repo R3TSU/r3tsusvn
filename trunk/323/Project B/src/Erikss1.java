@@ -8,9 +8,9 @@ import aima.core.search.adversarial.GameAgent;
  * 
  */ 
 public class Erikss1 implements Player, Piece {
-	GameAgent player = new GameAgent(new ErikssGame());
-	Board board;
-	String myPiece;
+	private ErikssGame player;
+	private Board board;
+	private String myPiece;
 
 	// implements Player
 	@Override
@@ -26,6 +26,7 @@ public class Erikss1 implements Player, Piece {
 
 	@Override
 	public int init(int n, int p) {
+		
 		switch (p) {
 		case ROW:
 			myPiece = "R";
@@ -35,7 +36,7 @@ public class Erikss1 implements Player, Piece {
 			break;
 		}
 		
-		board = new Board(n);
+		player = new ErikssGame(n,myPiece);
 		return 0;
 	}
 
