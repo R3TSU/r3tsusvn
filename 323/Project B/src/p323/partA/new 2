@@ -1,0 +1,12 @@
+﻿public class Hex {
+	private int x, y;
+	private char owner; // owner of this cells
+	private boolean visited;
+	private Vector neighbours;
+	
+	public Hex(int y, int x, int board) {
+	
+	}
+	
+	
+}
