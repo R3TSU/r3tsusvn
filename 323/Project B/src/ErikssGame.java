@@ -16,6 +16,7 @@ import aima.core.util.datastructure.XYLocation;
  */
 public class ErikssGame extends Game {
 	private char player;
+	
 	/**
 	 * @param n
 	 * @param name 
@@ -33,7 +34,8 @@ public class ErikssGame extends Game {
 		
 		player = name.charAt(0);
 		initialState.put("moves", moves);
-		initialState.put("player", name);
+		//initialState.put("player", name);
+		initialState.put("player", "R"); // assume row always starts first
 		initialState.put("utility", new Integer(0));
 		initialState.put("board", new Board(n));
 		initialState.put("level", new Integer(0));
@@ -49,8 +51,7 @@ public class ErikssGame extends Game {
 	 * use the more specialised compute utility to calculate
 	 */
 	protected int computeUtility(GameState state) {
-		int utility = computeUtility((Board) state.get("board"),
-				(getPlayerToMove(state)));
+		int utility = computeUtility((Board) state.get("board"), this.getLevel(state));
 		return utility;
 	}
 
@@ -62,12 +63,22 @@ public class ErikssGame extends Game {
 
 	@Override
 	public int getMiniMaxValue(GameState state) {
-		if (getPlayerToMove(state).equalsIgnoreCase("R")) {
-			return maxValue(state);
-
+		if (this.player == 'R') {
+			if (getPlayerToMove(state).equalsIgnoreCase("R")) {
+				return maxValue(state);
+			} else {
+				System.out.println("!!!!");
+				return minValue(state);
+			}
 		} else {
-			return minValue(state);
+			if (getPlayerToMove(state).equalsIgnoreCase("C")) {
+				return maxValue(state);
+			} else {
+				System.out.println("!!!!");
+				return minValue(state);
+			}
 		}
+		
 	}
 
 	/**
@@ -176,8 +187,7 @@ public class ErikssGame extends Game {
 			}
 			
 			retVal.put("board", newBoard);
-			retVal.put("utility", new Integer(computeUtility(newBoard,
-					getPlayerToMove(getState()))));
+			retVal.put("utility", new Integer(computeUtility(newBoard, getLevel(state) + 1)));
 			retVal.put("level", new Integer(getLevel(state) + 1));
 			// presentState = retVal;
 		}
@@ -191,15 +201,17 @@ public class ErikssGame extends Game {
 	 * @param playerToMove
 	 * @return
 	 */
-	private int computeUtility(Board newBoard, String playerToMove) {
+	private int computeUtility(Board newBoard, int level) {
 		//newBoard.printBoard();
 		if (newBoard.WON) { // just to make sure
 			//System.out.print(newBoard.WINNER);
 			//System.out.print(" " +playerToMove);
 			if (newBoard.WINNER == this.player) {
-				return 1;
+				return newBoard.getSize()*newBoard.getSize() - level;
+				//return 1;
 			} else {
-				return -1;
+				//return -1;
+				return -(newBoard.getSize()*newBoard.getSize() - level);
 			}
 		}
 		return 0;

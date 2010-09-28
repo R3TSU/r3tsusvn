@@ -20,6 +20,11 @@ public class Board {
 	private boolean board[][]; // contain the hex path
 	private Cell pieces[][]; //who owns the hex piece
 	private int size; // size of board or n
+	public int getSize() {
+		return size;
+	}
+
+
 	private int NUMBER_OF_NODES; // number of nodes or hex pieces
 	private boolean visited[][]; // notes if the board is visited or not
 	
