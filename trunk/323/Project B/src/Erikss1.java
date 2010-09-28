@@ -1,63 +1,88 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import p323.hex.*;
 import p323.partA.Board;
 
 import aima.core.search.adversarial.GameAgent;
+import aima.core.util.datastructure.XYLocation;
 /**
  * 
  */ 
 public class Erikss1 implements Player, Piece {
-	private ErikssGame player;
-	private Board board;
-	private String myPiece;
 
-	// implements Player
+	private String myPiece;
+	private String yourPiece;
+	private ErikssGame player;
+
 	@Override
 	public int getWinner() {
 		// TODO Auto-generated method stub
-		board.DFS();
-		if (board.WON) {
-			if (board.WINNER == 'C') return COL;
-			if (board.WINNER == 'R') return ROW;
-		}
 		return 0;
 	}
 
 	@Override
 	public int init(int n, int p) {
-		
 		switch (p) {
 		case ROW:
 			myPiece = "R";
+			yourPiece = "C";
 			break;
 		case COL:
 			myPiece = "C";
+			yourPiece = "R";
 			break;
 		}
-		
 		player = new ErikssGame(n,myPiece);
+		//player.printState(player.getState());
 		return 0;
 	}
 
 	@Override
 	public Move makeMove() {
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			buffer.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Move m = new Move();
-
+		XYLocation loc = player.minimaxDecision();
+		
+		m.Row = loc.getXCoOrdinate();
+		m.Col = loc.getYCoOrdinate();
+		switch (myPiece.charAt(0)) {
+		case 'R':
+			m.P = ROW;
+			break;
+		case 'C':
+			m.P = COL;
+			break;
+		}
+		
+		System.out.println("mymove: " + m.Col + " "+m.Row);
+		//player.printState(player.getState());
 		return m;
 	}
 
 	@Override
 	public int opponentMove(Move m) {
-		board.addPiece(m.Row, m.Col, myPiece.charAt(0));
+		System.out.println("yourmove: " + m.Col + " "+m.Row);
+		if (player.getBoard(player.getState()).checkEmptyPos(m.Col, m.Row) != 0) {
+			return -1;
+		}
+		
+		XYLocation loc = new XYLocation(m.Row, m.Col);
+		player.opponentDecision(loc);//player.printState(player.getState());
 		return 0;
 	}
 
 	@Override
 	public void printboard(PrintStream output) {
 		output.println("player " + myPiece);
-		board.printBoard();
+		player.getBoard(player.getState()).printBoard();
 	}
-
-
 }
