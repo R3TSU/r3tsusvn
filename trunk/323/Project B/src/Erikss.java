@@ -42,13 +42,13 @@ public class Erikss implements Player, Piece {
 
 	@Override
 	public Move makeMove() {
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			buffer.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+//		try {
+//			buffer.readLine();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		Random randomMove = new Random();
 		Move m = new Move();
@@ -60,14 +60,14 @@ public class Erikss implements Player, Piece {
 			m.Col = randomMove.nextInt(size);
 		}
 		
-		System.out.println("mymove: " + m.Col + " "+m.Row);
+		//System.out.println("mymove: " + m.Col + " "+m.Row);
 		state.addPiece(m.Col, m.Row, piece);
 		return m;
 	}
 
 	@Override
 	public int opponentMove(Move m) {
-		System.out.println("yourmove: " + m.Col + " "+m.Row);
+		//System.out.println("yourmove: " + m.Col + " "+m.Row);
 		
 		if (state.checkEmptyPos(m.Col, m.Row) != 0) {
 			return -1;

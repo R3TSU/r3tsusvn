@@ -19,7 +19,23 @@ public class Erikss1 implements Player, Piece {
 
 	@Override
 	public int getWinner() {
-		// TODO Auto-generated method stub
+		
+//		//board.printBoard();
+//		if (player.hasEnded()) {
+//			System.out.println("COL");
+//		}
+		if (player.hasEnded()) {
+			Board board = player.getBoard(player.getState());
+			if (board.WINNER == 'C') {
+				//System.out.println("COL");
+				return COL;
+			}
+				
+			if (board.WINNER == 'R') {
+				//System.out.println("ROW");
+				return ROW;
+			}
+		}
 		return 0;
 	}
 
@@ -42,13 +58,13 @@ public class Erikss1 implements Player, Piece {
 
 	@Override
 	public Move makeMove() {
-		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			buffer.readLine();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+//		try {
+//			buffer.readLine();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		Move m = new Move();
 		XYLocation loc = player.minimaxDecision();
 		
@@ -63,14 +79,14 @@ public class Erikss1 implements Player, Piece {
 			break;
 		}
 		
-		System.out.println("mymove: " + m.Col + " "+m.Row);
+		//System.out.println("mymove: " + m.Col + " "+m.Row);
 		//player.printState(player.getState());
 		return m;
 	}
 
 	@Override
 	public int opponentMove(Move m) {
-		System.out.println("yourmove: " + m.Col + " "+m.Row);
+		//System.out.println("yourmove: " + m.Col + " "+m.Row);
 		if (player.getBoard(player.getState()).checkEmptyPos(m.Col, m.Row) != 0) {
 			return -1;
 		}
