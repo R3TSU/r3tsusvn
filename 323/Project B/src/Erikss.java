@@ -1,27 +1,20 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.Random;
 
 import p323.hex.*;
 import p323.partA.Board;
 
-/**
- * @author erikss
- *	v1 : add, init implementation, add private mypiece, add makemove implementation with default value
- *  v2 : add random, make movement random, also add Board internal state for the player, add board size for player
- *  v3 : initialize board, add move to the board, add print board in board
- *  v4 : get the opponent move into the board
- *  v5 : modify movement if already placed, adding method to the board
- *  v6 : check for winning, change board to have some public
- *   
- */ 
 public class Erikss implements Player, Piece {
-	private int myPiece; // My piece
+	private char piece; // My piece
+	private char oPiece;
 	private int size;
 	private Board state;
 	
 	@Override
 	public int getWinner() {
-		// TODO Auto-generated method stub
 		state.DFS();
 		if (state.WON) {
 			if (state.WINNER == 'C') return COL;
@@ -32,70 +25,62 @@ public class Erikss implements Player, Piece {
 
 	@Override
 	public int init(int n, int p) {
-		// TODO Auto-generated method stub
 		size = n;
-		myPiece = p;
+		switch (p) {
+		case ROW:
+			piece = 'R';
+			oPiece = 'C';
+			break;
+		case COL:
+			piece = 'C';
+			oPiece = 'R';
+			break;
+		}
 		state = new Board(n);
 		return 0;
 	}
 
 	@Override
 	public Move makeMove() {
-		// TODO Auto-generated method stub
+		BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			buffer.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Random randomMove = new Random();
 		Move m = new Move();
-//		m.Row = -1;
 		m.Row = randomMove.nextInt(size);
-//		m.Col = -1;
 		m.Col = randomMove.nextInt(size);
-		m.P = myPiece;
-		while (state.checkEmptyPos(m.Row, m.Col) < 0){
+		while (state.checkEmptyPos(m.Col, m.Row) != 0){
 			// find another place
 			m.Row = randomMove.nextInt(size);
 			m.Col = randomMove.nextInt(size);
 		}
 		
-		char piece = '-';
-		switch (myPiece) {
-		case ROW:
-			piece = 'R';
-			break;
-		case COL:
-			piece = 'C';
-			break;
-		default:
-			piece = '-';
-			break;
-		}
-		state.addPiece(m.Row, m.Col, piece);
+		System.out.println("mymove: " + m.Col + " "+m.Row);
+		state.addPiece(m.Col, m.Row, piece);
 		return m;
 	}
 
 	@Override
 	public int opponentMove(Move m) {
-		// TODO Auto-generated method stub
-		char piece = '-';
-		switch (m.P) {
-		case ROW:
-			piece = 'R';
-			break;
-		case COL:
-			piece = 'C';
-			break;
-		default:
-			piece = '-';
-			break;
+		System.out.println("yourmove: " + m.Col + " "+m.Row);
+		
+		if (state.checkEmptyPos(m.Col, m.Row) != 0) {
+			return -1;
 		}
-		// havent got illegal move
-		state.addPiece(m.Row, m.Col, piece);
+		
+		state.addPiece(m.Col, m.Row, oPiece);
 		return 0;
 	}
 
 	@Override
 	public void printboard(PrintStream output) {
-		// TODO Auto-generated method stub
-		output.println("player " + myPiece);
+		output.println("player " + piece);
 		state.printBoard();
 	}
-
+	
 }

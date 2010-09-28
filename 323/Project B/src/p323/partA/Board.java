@@ -101,7 +101,7 @@ public class Board {
 	public int checkEmptyPos(int y, int x) {
 		if (this.pieces[y][x].getOwner() == 'R' || this.pieces[y][x].getOwner() == 'C') {
 			// already got player
-			return -1;
+			return 1;
 		}
 		return 0;
 	}

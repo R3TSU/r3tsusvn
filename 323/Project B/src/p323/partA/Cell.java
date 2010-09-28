@@ -12,7 +12,7 @@ package p323.partA;
  */
 public class Cell {
 	private int x, y;
-	private char owner = '_'; // owner of this cells
+	private char owner = '-'; // owner of this cells
 	
 	// Constructor
 	public Cell (int y, int x) {
